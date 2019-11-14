@@ -8,6 +8,7 @@ import (
 var reComment = regexp.MustCompile(`^( )*#`)
 var reStartHost = regexp.MustCompile(`^define host.*`)
 var reStartHostGroup = regexp.MustCompile(`^define hostgroup.*`)
+var reStartCommand = regexp.MustCompile(`^define command.*`)
 var reEndDefineStatment = regexp.MustCompile(`^}`)
 var inLineComment = regexp.MustCompile(` *;.*`)
 
