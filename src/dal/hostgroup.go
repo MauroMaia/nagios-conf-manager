@@ -26,7 +26,7 @@ func ReadNagiosHostGroupFromFileTask(file string, outputChannel chan *model.Host
 			}
 
 			// end of 'define' group
-			if reEndDefineStatment.MatchString(line) && strings.Compare(define, "") > 0 {
+			if reEndDefineStatement.MatchString(line) && strings.Compare(define, "") > 0 {
 				define += "\n"
 				define += line
 				outputChannel <- model.NewNagiosHostGroup(define)

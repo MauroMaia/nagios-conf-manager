@@ -9,7 +9,11 @@ var reComment = regexp.MustCompile(`^( )*#`)
 var reStartHost = regexp.MustCompile(`^define host.*`)
 var reStartHostGroup = regexp.MustCompile(`^define hostgroup.*`)
 var reStartCommand = regexp.MustCompile(`^define command.*`)
-var reEndDefineStatment = regexp.MustCompile(`^}`)
+var reStartContact = regexp.MustCompile(`^define contact.*`)
+var reStartContactGroup = regexp.MustCompile(`^define contactgroup.*`)
+var reStartService = regexp.MustCompile(`^define service.*`)
+var reStartServiceGroup = regexp.MustCompile(`^define servicegroup.*`)
+var reEndDefineStatement = regexp.MustCompile(`^}`)
 var inLineComment = regexp.MustCompile(` *;.*`)
 
 func RemoveComments(str string) string {

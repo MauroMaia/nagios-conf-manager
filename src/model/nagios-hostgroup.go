@@ -16,7 +16,7 @@ type HostGroup struct {
 	Members          []string `json:"members"`           // comma separated list
 	HostGroupMembers []string `json:"hostgroup_members"` // comma separated list
 
-	// FOR MOR INFORMATION CHECK: https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/3/en/objectdefinitions.html#hostgroup
+	// FOR MOR INFORMATION CHECK: https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/4/en/objectdefinitions.html#hostgroup
 }
 
 var reHostGroupName = regexp.MustCompile(`.*hostgroup_name *(.+).*`)
@@ -30,8 +30,15 @@ func NewNagiosHostGroup(defineString string) *HostGroup {
 	membersString := utils.FindFirstStringOrDefault(reMembers, defineString, "")
 	hostGroupMembersString := utils.FindFirstStringOrDefault(reHostGroupMembers, defineString, "")
 
-	members := strings.Split(membersString, ",")
-	hostGroupMembers := strings.Split(hostGroupMembersString, ",")
+	var members = []string{membersString}
+	var hostGroupMembers = []string{hostGroupMembersString}
+
+	if strings.Contains(membersString, ","){
+		members = strings.Split(membersString, ",")
+	}
+	if strings.Contains(hostGroupMembersString, ","){
+		hostGroupMembers = strings.Split(hostGroupMembersString, ",")
+	}
 
 	return &HostGroup{
 		hostNameString,

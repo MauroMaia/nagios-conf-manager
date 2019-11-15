@@ -9,7 +9,7 @@ import (
 	"nagios-conf-manager/src/utils"
 )
 
-func ReadNagiosCommandFromFileTask(file string, outputChannel chan *model.Command, waitG *sync.WaitGroup) {
+func ReadNagiosContactGroupFromFileTask(file string, outputChannel chan *model.ContactGroup, waitG *sync.WaitGroup) {
 	if utils.IsFile(file) {
 
 		text := utils.ReadFileOrPanic(file)
@@ -29,12 +29,12 @@ func ReadNagiosCommandFromFileTask(file string, outputChannel chan *model.Comman
 			if reEndDefineStatement.MatchString(line) && strings.Compare(define, "") > 0 {
 				define += "\n"
 				define += line
-				outputChannel <- model.NewNagiosCommand(define)
+				outputChannel <- model.NewNagiosContactGroup(define)
 				define = ""
 				continue
 			}
 
-			if reStartCommand.MatchString(line)  {
+			if reStartContactGroup.MatchString(line)  {
 				define = line
 			} else if strings.Compare(define, "") > 0 {
 				define += "\n"

@@ -28,7 +28,7 @@ type Host struct {
 	// use - Name of host template to use
 	Use string `json:"use"`
 
-	// FOR MOR INFORMATION CHECK: https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/3/en/objectdefinitions.html#host
+	// FOR MOR INFORMATION CHECK: https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/4/en/objectdefinitions.html#host
 }
 
 var reHostName = regexp.MustCompile(`.*hostName *(.+).*`)

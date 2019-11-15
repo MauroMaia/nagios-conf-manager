@@ -13,7 +13,7 @@ type Command struct {
 	CommandName string `json:"command_name"`
 	CommandLine string `json:"command_line"`
 
-	// FOR MOR INFORMATION CHECK: https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/3/en/objectdefinitions.html#command
+	// FOR MOR INFORMATION CHECK: https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/4/en/objectdefinitions.html#command
 }
 
 var reCommandName = regexp.MustCompile(`.*command_name *(.+).*`)
