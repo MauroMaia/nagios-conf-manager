@@ -13,6 +13,7 @@ var reStartContact = regexp.MustCompile(`^define contact.*`)
 var reStartContactGroup = regexp.MustCompile(`^define contactgroup.*`)
 var reStartService = regexp.MustCompile(`^define service.*`)
 var reStartServiceGroup = regexp.MustCompile(`^define servicegroup.*`)
+var reStartTimePeriod = regexp.MustCompile(`^define timeperiod.*`)
 var reEndDefineStatement = regexp.MustCompile(`^}`)
 var inLineComment = regexp.MustCompile(` *;.*`)
 

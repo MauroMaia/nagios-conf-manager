@@ -27,6 +27,9 @@ func CliParseDomain() {
 	case "services":
 		parseServicesActions()
 		break
+	case "timeperiods":
+		parseTimePeriodActions()
+		break
 	default:
 		cmd.PrintErrorString(fmt.Sprintf("Cli expected %v subcommands", []string{
 			"host",
@@ -35,7 +38,22 @@ func CliParseDomain() {
 			"contacts",
 			"contactgroups",
 			"services",
+			"timeperiods",
 		}), 1)
+	}
+}
+
+func parseTimePeriodActions() {
+	switch os.Args[3] {
+	case "list":
+		timePeriods, err := ListAllTimePeriods("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+		if err != nil {
+			cmd.PrintError(err, 2)
+		} else {
+			cmd.PrintTimePeriodsList(timePeriods)
+		}
+	default:
+		cmd.PrintErrorString(fmt.Sprintf("'cli host' expected %v subcommands", []string{"list"}), 1)
 	}
 }
 
