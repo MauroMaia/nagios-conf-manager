@@ -29,7 +29,9 @@ func ReadNagiosTimePeriodsFromFileTask(file string, outputChannel chan *model.Ti
 			if reEndDefineStatement.MatchString(line) && strings.Compare(define, "") > 0 {
 				define += "\n"
 				define += line
-				outputChannel <- model.NewNagiosTimePeriods(define)
+				defineArray := strings.Split(define, string('\n'))
+				defineArray = defineArray[1 : len(defineArray)-1]
+				outputChannel <- model.NewNagiosTimePeriods(strings.Join(defineArray, "\n"))
 				define = ""
 				continue
 			}

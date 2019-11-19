@@ -3,6 +3,7 @@ package model
 import (
 	"encoding/json"
 	"regexp"
+	"strings"
 
 	"nagios-conf-manager/src/utils"
 	"nagios-conf-manager/src/utils/exceptions"
@@ -22,6 +23,8 @@ type TimePeriods struct {
 	Friday    string `json:"friday"`
 	Saturday  string `json:"saturday"`
 
+	Other map[string]string
+
 	// FOR MOR INFORMATION CHECK: https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/4/en/objectdefinitions.html#timeperiod
 }
 
@@ -29,25 +32,45 @@ var reTimePeriodsName = regexp.MustCompile(`.*name *(.+).*`)
 var reTimePeriodsTimePeriodName = regexp.MustCompile(`.*timeperiod_name *(.+).*`)
 var reTimePeriodsAlias = regexp.MustCompile(`.*alias *(.+).*`)
 
-var reTimePeriodsSunday = regexp.MustCompile(`.*sunday *([0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}).*`)
-var reTimePeriodsMonday = regexp.MustCompile(`.*monday *([0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}).*`)
-var reTimePeriodsTuesday = regexp.MustCompile(`.*tuesday *([0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}).*`)
-var reTimePeriodsWednesday = regexp.MustCompile(`.*wednesday *([0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}).*`)
-var reTimePeriodsThursday = regexp.MustCompile(`.*thursday *([0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}).*`)
-var reTimePeriodsFriday = regexp.MustCompile(`.*friday *([0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}).*`)
-var reTimePeriodsSaturday = regexp.MustCompile(`.*saturday *([0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}).*`)
+var reLine = regexp.MustCompile(` *(.+) *([0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}).*`)
 
 func NewNagiosTimePeriods(defineString string) *TimePeriods {
 	name := utils.FindFirstStringOrDefault(reTimePeriodsName, defineString, "")
 	timePeriodName := utils.FindFirstStringOrDefault(reTimePeriodsTimePeriodName, defineString, "")
 	alias := utils.FindFirstStringOrDefault(reTimePeriodsAlias, defineString, "")
-	sunday := utils.FindFirstStringOrDefault(reTimePeriodsSunday, defineString, "")
-	monday := utils.FindFirstStringOrDefault(reTimePeriodsMonday, defineString, "")
-	tuesday := utils.FindFirstStringOrDefault(reTimePeriodsTuesday, defineString, "")
-	wednesday := utils.FindFirstStringOrDefault(reTimePeriodsWednesday, defineString, "")
-	thursday := utils.FindFirstStringOrDefault(reTimePeriodsThursday, defineString, "")
-	friday := utils.FindFirstStringOrDefault(reTimePeriodsFriday, defineString, "")
-	saturday := utils.FindFirstStringOrDefault(reTimePeriodsSaturday, defineString, "")
+
+	resultArray := reLine.FindAllStringSubmatch(defineString, -1)
+
+	var sunday, monday, tuesday, wednesday, thursday, friday, saturday string
+	var other map[string]string = make(map[string]string)
+	for _, matchElement := range resultArray {
+		matchElement[1] = strings.TrimSpace(matchElement[1])
+		switch matchElement[1] {
+		case "sunday":
+			sunday = matchElement[2]
+			break
+		case "monday":
+			monday = matchElement[2]
+			break
+		case "tuesday":
+			tuesday = matchElement[2]
+			break
+		case "wednesday":
+			wednesday = matchElement[2]
+			break
+		case "thursday":
+			thursday = matchElement[2]
+			break
+		case "friday":
+			friday = matchElement[2]
+			break
+		case "saturday":
+			saturday = matchElement[2]
+			break
+		default:
+			other[matchElement[1]] = matchElement[2]
+		}
+	}
 
 	return &TimePeriods{
 		name,
@@ -60,6 +83,7 @@ func NewNagiosTimePeriods(defineString string) *TimePeriods {
 		thursday,
 		friday,
 		saturday,
+		other,
 	}
 }
 
