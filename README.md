@@ -10,7 +10,7 @@ This project is another web based (with command line) nagios configuration tool.
 
 **Note:** This tool is in **development state** and not ready to use in production.
 
-In the feature some features will be:
+In the near future some features will be:
 
 ### Features
 
