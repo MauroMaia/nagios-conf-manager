@@ -9,7 +9,7 @@ import (
 )
 
 func readAllCommands(nagiosConfigDir string) (chan *model.Command, error) {
-	configFiles, err := GetConfigurationFies(nagiosConfigDir)
+	configFiles, err := dal.GetConfigurationFies(nagiosConfigDir)
 	if err != nil {
 		return nil, err
 	}

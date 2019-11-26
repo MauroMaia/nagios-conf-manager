@@ -10,7 +10,7 @@ import (
 
 func readAllHostGroups(nagiosConfigDir string) (chan *model.HostGroup, error) {
 
-	configFiles, err := GetConfigurationFies(nagiosConfigDir)
+	configFiles, err := dal.GetConfigurationFies(nagiosConfigDir)
 	if err != nil {
 		return nil, err
 	}

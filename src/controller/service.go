@@ -10,7 +10,7 @@ import (
 
 func readAllService(nagiosConfigDir string) (chan *model.Service, error) {
 
-	configFiles, err := GetConfigurationFies(nagiosConfigDir)
+	configFiles, err := dal.GetConfigurationFies(nagiosConfigDir)
 	if err != nil {
 		return nil, err
 	}

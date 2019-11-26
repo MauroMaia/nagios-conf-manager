@@ -10,7 +10,7 @@ import (
 
 func readAllContactGroups(nagiosConfigDir string) (chan *model.ContactGroup, error) {
 
-	configFiles, err := GetConfigurationFies(nagiosConfigDir)
+	configFiles, err := dal.GetConfigurationFies(nagiosConfigDir)
 	if err != nil {
 		return nil, err
 	}
