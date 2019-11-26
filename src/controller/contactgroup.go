@@ -14,29 +14,59 @@ func ListAllContactGroups(nagiosConfigDir string) ([]*model.ContactGroup, error)
 	if err != nil {
 		return nil, err
 	}
-	var hostList []*model.ContactGroup
+	var contactGroups []*model.ContactGroup
 
-	chOut := make(chan *model.ContactGroup, 20)
+	channelOutput := make(chan *model.ContactGroup, 20)
+
 	go func() {
+		var waitGroup sync.WaitGroup
 
-		var waitG sync.WaitGroup
+		for _, file := range configFiles {
+			waitGroup.Add(1)
+			go dal.ReadNagiosContactGroupFromFileTask(file, channelOutput, &waitGroup)
 
-		for _, item := range configFiles {
-
-			waitG.Add(1)
-			go dal.ReadNagiosContactGroupFromFileTask(item, chOut, &waitG)
-
-			utils.Log.Printf("created a task to process the file %s", item)
+			utils.Log.Printf("created a task to process the file %s", file)
 		}
 
 		// Wait for all threads/goroutines to stop
-		waitG.Wait()
-		close(chOut)
+		waitGroup.Wait()
+		close(channelOutput)
 	}()
 
-	for host := range chOut {
-
-		hostList = append(hostList, host)
+	for contactGroup := range channelOutput {
+		contactGroups = append(contactGroups, contactGroup)
 	}
-	return hostList, nil
+	return contactGroups, nil
+}
+
+func FindContactGroupByName(nagiosConfigDir string, name string) (*model.ContactGroup, error) {
+
+	configFiles, err := GetConfigurationFies(nagiosConfigDir)
+	if err != nil {
+		return nil, err
+	}
+
+	channelOutput := make(chan *model.ContactGroup, 20)
+
+	go func() {
+		var waitGroup sync.WaitGroup
+
+		for _, file := range configFiles {
+			waitGroup.Add(1)
+			go dal.ReadNagiosContactGroupFromFileTask(file, channelOutput, &waitGroup)
+
+			utils.Log.Printf("created a task to process the file %s", file)
+		}
+
+		// Wait for all threads/goroutines to stop
+		waitGroup.Wait()
+		close(channelOutput)
+	}()
+
+	for contactGroup := range channelOutput {
+		if contactGroup.ContactGroupName == name {
+			return contactGroup, nil
+		}
+	}
+	return nil, nil
 }

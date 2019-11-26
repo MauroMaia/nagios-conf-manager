@@ -9,19 +9,18 @@ import (
 	"nagios-conf-manager/src/utils/exceptions"
 )
 
-var cfgDeclarationLine = regexp.MustCompile("\ncfg_file=.*")
+var reCFGDeclarationLine = regexp.MustCompile("\ncfg_file=.*")
 
 func GetConfigurationFies(nagiosConfigDir string) ([]string, error) {
 	nagiosConfigFile := nagiosConfigDir + "/nagios.cfg"
 	var configFiles []string
 
 	if utils.IsFile(nagiosConfigFile) {
-		text := utils.ReadFileOrPanic(nagiosConfigFile)
-		listOfConfigurationFiles := cfgDeclarationLine.FindAllString(text, -1)
+		rawFileText := utils.ReadFileOrPanic(nagiosConfigFile)
+		listOfConfigurationFiles := reCFGDeclarationLine.FindAllString(rawFileText, -1)
 
 		for _, file := range listOfConfigurationFiles {
-			// TODO - Remove next line
-			// Only for local development
+			// TODO - Remove next line - Only for local development
 			file = strings.Replace(file, "\ncfg_file=/usr/local/nagios/etc/", "/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles/", -1)
 			// file = strings.Replace(file, "\ncfg_file=", "", -1)
 

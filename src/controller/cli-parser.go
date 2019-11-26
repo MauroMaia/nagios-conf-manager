@@ -88,7 +88,7 @@ func parseHostActions() {
 func parseHostGroupActions() {
 	switch os.Args[3] {
 	case "list":
-		hostGroups, err := ListAllHostsGroups("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+		hostGroups, err := ListAllHostGroups("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
 		if err != nil {
 			cmd.PrintError(err, 2)
 		} else {

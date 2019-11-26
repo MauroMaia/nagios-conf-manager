@@ -8,30 +8,29 @@ import (
 	"nagios-conf-manager/src/controller"
 )
 
-func GetHostList(c *gin.Context) {
-	hosts, err := controller.ListAllHosts("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+func GetContactGroups(c *gin.Context) {
+	contactGroups, err := controller.ListAllContactGroups("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
 	if err != nil {
 		// http.Error(response, "já foste: "+err.Error(), http.StatusInternalServerError)
 		_ = c.Error(err)
 		return
-	} else if len(hosts) == 0 {
+	} else if len(contactGroups) == 0 {
 		c.AbortWithStatus(http.StatusNoContent)
 		return
 	}
 
-	c.JSON(http.StatusOK, hosts)
+	c.JSON(http.StatusOK, contactGroups)
 }
 
-
-func GetHostByName(c *gin.Context) {
+func GetContactGroupByName(c *gin.Context) {
 	requestParameterName := c.Param("name")
-	host, err := controller.FindHostByName("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles", requestParameterName)
+	contactGroup, err := controller.FindContactGroupByName("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles", requestParameterName)
 	if err != nil {
 		// http.Error(response, "já foste: "+err.Error(), http.StatusInternalServerError)
 		_ = c.Error(err)
 		return
-	} else if host != nil {
-		c.JSON(http.StatusOK, host)
+	} else if contactGroup != nil {
+		c.JSON(http.StatusOK, contactGroup)
 		return
 	}
 

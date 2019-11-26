@@ -5,7 +5,9 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	"nagios-conf-manager/src/controller"
@@ -13,23 +15,19 @@ import (
 	"nagios-conf-manager/src/view/cmd"
 )
 
-/*func init(){
-	f, err := os.OpenFile("/home/mauro.maia/go/src/nagios-conf-manager/log.log", os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalf("error opening file: %v", err)
-	}
-	defer f.Close()
-
-	log.SetOutput(f)
-	log.SetPrefix("main/run")
-	log.Println("Init generic")
-}*/
-
 func startWebservice() {
-	// http.HandleFunc("/", webGetHostList)
-	// log.Fatal(http.ListenAndServe(":8080", nil))
 
 	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST"},
+		AllowHeaders:     []string{"Origin"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           30 * time.Second,
+	}))
+
 	r.NoRoute(func(c *gin.Context) {
 		dir, file := path.Split(c.Request.RequestURI)
 		ext := filepath.Ext(file)
@@ -41,7 +39,26 @@ func startWebservice() {
 	})
 
 	r.GET("/hosts", api.GetHostList)
+	r.GET("/hosts/:name", api.GetHostByName)
+
 	r.GET("/hostgroups", api.GetHostGroupList)
+	r.GET("/hostgroups/:name", api.GetHostGroupByName)
+
+	r.GET("/services", api.GetServices)
+	r.GET("/services/:name", api.GetServiceByName)
+
+	r.GET("/commands", api.GetCommands)
+	r.GET("/commands/:name", api.GetCommandByName)
+
+	r.GET("/contacts", api.GetContacts)
+	r.GET("/contacts/:name", api.GetContactByName)
+
+	r.GET("/contactgroups", api.GetContactGroups)
+	r.GET("/contactgroups/:name", api.GetContactGroupByName)
+
+	r.GET("/timeperiods", api.GetTimePeriods)
+	r.GET("/timeperiods/:name", api.GetTimePeriodByName)
+
 	/*r.POST("/todo", handlers.AddTodoHandler)
 	r.DELETE("/todo/:id", handlers.DeleteTodoHandler)
 	r.PUT("/todo", handlers.CompleteTodoHandler)*/

@@ -8,30 +8,29 @@ import (
 	"nagios-conf-manager/src/controller"
 )
 
-func GetHostList(c *gin.Context) {
-	hosts, err := controller.ListAllHosts("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+func GetTimePeriods(c *gin.Context) {
+	timePeriods, err := controller.ListAllTimePeriods("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
 	if err != nil {
 		// http.Error(response, "já foste: "+err.Error(), http.StatusInternalServerError)
 		_ = c.Error(err)
 		return
-	} else if len(hosts) == 0 {
+	} else if len(timePeriods) == 0 {
 		c.AbortWithStatus(http.StatusNoContent)
 		return
 	}
 
-	c.JSON(http.StatusOK, hosts)
+	c.JSON(http.StatusOK, timePeriods)
 }
 
-
-func GetHostByName(c *gin.Context) {
+func GetTimePeriodByName(c *gin.Context) {
 	requestParameterName := c.Param("name")
-	host, err := controller.FindHostByName("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles", requestParameterName)
+	timePeriod, err := controller.FindTimePeriodByName("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles", requestParameterName)
 	if err != nil {
 		// http.Error(response, "já foste: "+err.Error(), http.StatusInternalServerError)
 		_ = c.Error(err)
 		return
-	} else if host != nil {
-		c.JSON(http.StatusOK, host)
+	} else if timePeriod != nil {
+		c.JSON(http.StatusOK, timePeriod)
 		return
 	}
 

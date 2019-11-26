@@ -14,29 +14,60 @@ func ListAllHosts(nagiosConfigDir string) ([]*model.Host, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	var hostList []*model.Host
 
-	chOut := make(chan *model.Host, 20)
-	go func() {
+	channelOutput := make(chan *model.Host, 20)
 
-		var waitG sync.WaitGroup
+	go func() {
+		var waitGroup sync.WaitGroup
 
 		for _, item := range configFiles {
-
-			waitG.Add(1)
-			go dal.ReadNagiosHostFromFileTask(item, chOut, &waitG)
+			waitGroup.Add(1)
+			go dal.ReadNagiosHostFromFileTask(item, channelOutput, &waitGroup)
 
 			utils.Log.Printf("created a task to process the file %s", item)
 		}
 
 		// Wait for all threads/goroutines to stop
-		waitG.Wait()
-		close(chOut)
+		waitGroup.Wait()
+		close(channelOutput)
 	}()
 
-	for host := range chOut {
-
+	for host := range channelOutput {
 		hostList = append(hostList, host)
 	}
 	return hostList, nil
+}
+
+func FindHostByName(nagiosConfigDir string, name string) (*model.Host, error) {
+
+	configFiles, err := GetConfigurationFies(nagiosConfigDir)
+	if err != nil {
+		return nil, err
+	}
+
+	channelOutput := make(chan *model.Host, 20)
+
+	go func() {
+		var waitGroup sync.WaitGroup
+
+		for _, item := range configFiles {
+			waitGroup.Add(1)
+			go dal.ReadNagiosHostFromFileTask(item, channelOutput, &waitGroup)
+
+			utils.Log.Printf("created a task to process the file %s", item)
+		}
+
+		// Wait for all threads/goroutines to stop
+		waitGroup.Wait()
+		close(channelOutput)
+	}()
+
+	for host := range channelOutput {
+		if host.Name == name {
+			return host, nil
+		}
+	}
+	return nil, nil
 }

@@ -14,29 +14,60 @@ func ListAllService(nagiosConfigDir string) ([]*model.Service, error) {
 	if err != nil {
 		return nil, err
 	}
-	var hostList []*model.Service
 
-	chOut := make(chan *model.Service, 20)
+	var services []*model.Service
+
+	channelOutput := make(chan *model.Service, 20)
+
 	go func() {
+		var waitGroup sync.WaitGroup
 
-		var waitG sync.WaitGroup
+		for _, file := range configFiles {
+			waitGroup.Add(1)
+			go dal.ReadNagiosServiceFromFileTask(file, channelOutput, &waitGroup)
 
-		for _, item := range configFiles {
-
-			waitG.Add(1)
-			go dal.ReadNagiosServiceFromFileTask(item, chOut, &waitG)
-
-			utils.Log.Printf("created a task to process the file %s", item)
+			utils.Log.Printf("Created a task to process the file: %s", file)
 		}
 
 		// Wait for all threads/goroutines to stop
-		waitG.Wait()
-		close(chOut)
+		waitGroup.Wait()
+		close(channelOutput)
 	}()
 
-	for host := range chOut {
-
-		hostList = append(hostList, host)
+	for service := range channelOutput {
+		services = append(services, service)
 	}
-	return hostList, nil
+	return services, nil
+}
+
+func FindServiceByName(nagiosConfigDir string, name string) (*model.Service, error) {
+
+	configFiles, err := GetConfigurationFies(nagiosConfigDir)
+	if err != nil {
+		return nil, err
+	}
+
+	channelOutput := make(chan *model.Service, 20)
+
+	go func() {
+		var waitGroup sync.WaitGroup
+
+		for _, file := range configFiles {
+			waitGroup.Add(1)
+			go dal.ReadNagiosServiceFromFileTask(file, channelOutput, &waitGroup)
+
+			utils.Log.Printf("Created a task to process the file: %s", file)
+		}
+
+		// Wait for all threads/goroutines to stop
+		waitGroup.Wait()
+		close(channelOutput)
+	}()
+
+	for service := range channelOutput {
+		if service.ServiceDescription == name {
+			return service, nil
+		}
+	}
+	return nil, nil
 }

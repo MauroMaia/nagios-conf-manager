@@ -8,30 +8,29 @@ import (
 	"nagios-conf-manager/src/controller"
 )
 
-func GetHostList(c *gin.Context) {
-	hosts, err := controller.ListAllHosts("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+func GetCommands(c *gin.Context) {
+	commands, err := controller.ListAllCommands("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
 	if err != nil {
 		// http.Error(response, "já foste: "+err.Error(), http.StatusInternalServerError)
 		_ = c.Error(err)
 		return
-	} else if len(hosts) == 0 {
+	} else if len(commands) == 0 {
 		c.AbortWithStatus(http.StatusNoContent)
 		return
 	}
 
-	c.JSON(http.StatusOK, hosts)
+	c.JSON(http.StatusOK, commands)
 }
 
-
-func GetHostByName(c *gin.Context) {
+func GetCommandByName(c *gin.Context) {
 	requestParameterName := c.Param("name")
-	host, err := controller.FindHostByName("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles", requestParameterName)
+	command, err := controller.FindCommandByName("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles", requestParameterName)
 	if err != nil {
 		// http.Error(response, "já foste: "+err.Error(), http.StatusInternalServerError)
 		_ = c.Error(err)
 		return
-	} else if host != nil {
-		c.JSON(http.StatusOK, host)
+	} else if command != nil {
+		c.JSON(http.StatusOK, command)
 		return
 	}
 

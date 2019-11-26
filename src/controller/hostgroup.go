@@ -8,35 +8,64 @@ import (
 	"nagios-conf-manager/src/utils"
 )
 
-func ListAllHostsGroups(nagiosConfigDir string) ([]*model.HostGroup, error) {
+func ListAllHostGroups(nagiosConfigDir string) ([]*model.HostGroup, error) {
 
 	configFiles, err := GetConfigurationFies(nagiosConfigDir)
 	if err != nil {
 		return nil, err
 	}
+
 	var hostGroupsList []*model.HostGroup
 
-	chOut := make(chan *model.HostGroup, 20)
+	channelOutput := make(chan *model.HostGroup, 20)
 	go func() {
+		var waitGroup sync.WaitGroup
 
-		var waitG sync.WaitGroup
+		for _, file := range configFiles {
+			waitGroup.Add(1)
+			go dal.ReadNagiosHostGroupFromFileTask(file, channelOutput, &waitGroup)
 
-		for _, item := range configFiles {
-
-			waitG.Add(1)
-			go dal.ReadNagiosHostGroupFromFileTask(item, chOut, &waitG)
-
-			utils.Log.Printf("created a task to process the file %s", item)
+			utils.Log.Printf("created a task to process the file %s", file)
 		}
 
 		// Wait for all threads/gorutines to stop
-		waitG.Wait()
-		close(chOut)
+		waitGroup.Wait()
+		close(channelOutput)
 	}()
 
-	for host := range chOut {
-
-		hostGroupsList = append(hostGroupsList, host)
+	for hostGroup := range channelOutput {
+		hostGroupsList = append(hostGroupsList, hostGroup)
 	}
 	return hostGroupsList, nil
+}
+
+func FindHostGroupByName(nagiosConfigDir string, name string) (*model.HostGroup, error) {
+
+	configFiles, err := GetConfigurationFies(nagiosConfigDir)
+	if err != nil {
+		return nil, err
+	}
+
+	channelOutput := make(chan *model.HostGroup, 20)
+	go func() {
+		var waitGroup sync.WaitGroup
+
+		for _, file := range configFiles {
+			waitGroup.Add(1)
+			go dal.ReadNagiosHostGroupFromFileTask(file, channelOutput, &waitGroup)
+
+			utils.Log.Printf("created a task to process the file %s", file)
+		}
+
+		// Wait for all threads/gorutines to stop
+		waitGroup.Wait()
+		close(channelOutput)
+	}()
+
+	for hostGroup := range channelOutput {
+		if hostGroup.HostGroupName == name {
+			return hostGroup, nil
+		}
+	}
+	return nil, nil
 }
