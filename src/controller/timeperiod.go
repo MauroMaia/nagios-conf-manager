@@ -8,14 +8,12 @@ import (
 	"nagios-conf-manager/src/utils"
 )
 
-func ListAllTimePeriods(nagiosConfigDir string) ([]*model.TimePeriods, error) {
+func readAllTimePeriods(nagiosConfigDir string) (chan *model.TimePeriods, error) {
 
 	configFiles, err := GetConfigurationFies(nagiosConfigDir)
 	if err != nil {
 		return nil, err
 	}
-
-	var timePeriods []*model.TimePeriods
 
 	channelOutput := make(chan *model.TimePeriods, 20)
 
@@ -34,6 +32,15 @@ func ListAllTimePeriods(nagiosConfigDir string) ([]*model.TimePeriods, error) {
 		close(channelOutput)
 	}()
 
+	return channelOutput, nil
+}
+
+func ListAllTimePeriods(nagiosConfigDir string) ([]*model.TimePeriods, error) {
+
+	channelOutput, _ := readAllTimePeriods(nagiosConfigDir)
+
+	var timePeriods []*model.TimePeriods
+
 	for timePeriod := range channelOutput {
 		timePeriods = append(timePeriods, timePeriod)
 	}
@@ -42,27 +49,7 @@ func ListAllTimePeriods(nagiosConfigDir string) ([]*model.TimePeriods, error) {
 
 func FindTimePeriodByName(nagiosConfigDir string, name string) (*model.TimePeriods, error) {
 
-	configFiles, err := GetConfigurationFies(nagiosConfigDir)
-	if err != nil {
-		return nil, err
-	}
-
-	channelOutput := make(chan *model.TimePeriods, 20)
-
-	go func() {
-		var waitGroup sync.WaitGroup
-
-		for _, file := range configFiles {
-			waitGroup.Add(1)
-			go dal.ReadNagiosTimePeriodsFromFileTask(file, channelOutput, &waitGroup)
-
-			utils.Log.Printf("Created a task to process the file: %s", file)
-		}
-
-		// Wait for all threads/goroutines to stop
-		waitGroup.Wait()
-		close(channelOutput)
-	}()
+	channelOutput, _ := readAllTimePeriods(nagiosConfigDir)
 
 	// TODO - change/optimise search algorithm
 	for timePeriod := range channelOutput {

@@ -8,14 +8,11 @@ import (
 	"nagios-conf-manager/src/utils"
 )
 
-func ListAllCommands(nagiosConfigDir string) ([]*model.Command, error) {
-
+func readAllCommands(nagiosConfigDir string) (chan *model.Command, error) {
 	configFiles, err := GetConfigurationFies(nagiosConfigDir)
 	if err != nil {
 		return nil, err
 	}
-
-	var commands []*model.Command
 
 	channelOutput := make(chan *model.Command, 20)
 
@@ -33,6 +30,15 @@ func ListAllCommands(nagiosConfigDir string) ([]*model.Command, error) {
 		waitGroup.Wait()
 		close(channelOutput)
 	}()
+
+	return channelOutput, nil
+}
+
+func ListAllCommands(nagiosConfigDir string) ([]*model.Command, error) {
+
+	channelOutput, _ := readAllCommands(nagiosConfigDir)
+
+	var commands []*model.Command
 
 	for command := range channelOutput {
 		commands = append(commands, command)
@@ -42,27 +48,7 @@ func ListAllCommands(nagiosConfigDir string) ([]*model.Command, error) {
 
 func FindCommandByName(nagiosConfigDir string, name string) (*model.Command, error) {
 
-	configFiles, err := GetConfigurationFies(nagiosConfigDir)
-	if err != nil {
-		return nil, err
-	}
-
-	channelOutput := make(chan *model.Command, 20)
-
-	go func() {
-		var waitGroup sync.WaitGroup
-
-		for _, file := range configFiles {
-			waitGroup.Add(1)
-			go dal.ReadNagiosCommandFromFileTask(file, channelOutput, &waitGroup)
-
-			utils.Log.Printf("created a task to process the file %s", file)
-		}
-
-		// Wait for all threads/goroutines to stop
-		waitGroup.Wait()
-		close(channelOutput)
-	}()
+	channelOutput, _ := readAllCommands(nagiosConfigDir)
 
 	for command := range channelOutput {
 		if command.CommandName == name {
