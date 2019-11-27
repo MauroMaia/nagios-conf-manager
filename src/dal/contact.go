@@ -10,12 +10,19 @@ import (
 	"nagios-conf-manager/src/utils"
 )
 
-var reContactObjectName = regexp.MustCompile(`.*name *(.+).*`)
+// FOR MOR INFORMATION CHECK: https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/4/en/objectdefinitions.html#contact
+
 var reContactName = regexp.MustCompile(`.*contact_name *(.+).*`)
-var reContactUse = regexp.MustCompile(`.*use *(.+).*`)
 var reContactAlias = regexp.MustCompile(`.*alias *(.+).*`)
+var reContactHostNotificationsEnabled = regexp.MustCompile(`.*host_notifications_enabled *(.+).*`)
+var reContactServiceNotificationsEnabled = regexp.MustCompile(`.*service_notifications_enabled *(.+).*`)
+var reContactHostNotificationPeriod = regexp.MustCompile(`.*host_notification_period *(.+).*`)
+var reContactServiceNotificationPeriod = regexp.MustCompile(`.*service_notification_period *(.+).*`)
+var reContactHostNotificationOptions = regexp.MustCompile(`.*host_notification_options *(.+).*`)
+var reContactServiceNotificationOptions = regexp.MustCompile(`.*service_notification_options *(.+).*`)
+var reContactHostNotificationCommand = regexp.MustCompile(`.*host_notification_commands *(.+).*`)
+var reContactServiceNotificationCommand = regexp.MustCompile(`.*service_notification_commands *(.+).*`)
 var reContactEmail = regexp.MustCompile(`.*email *(.+).*`)
-var reContactRegister = regexp.MustCompile(`.*register *(.+).*`)
 
 func ConcurrentContactRead(nagiosConfigDir string) (chan *model.Contact, error) {
 	configFiles, err := GetConfigurationFies(nagiosConfigDir)
@@ -121,28 +128,46 @@ func contactStringToMap(defineString string) map[string]string {
 
 	var contactMap = make(map[string]string)
 
-	contactObjectNameString := utils.FindFirstStringOrDefault(reContactObjectName, defineString, "")
-	contactNameString := utils.FindFirstStringOrDefault(reContactName, defineString, "")
-	useString := utils.FindFirstStringOrDefault(reContactUse, defineString, "")
-	aliasString := utils.FindFirstStringOrDefault(reContactAlias, defineString, "")
-	emailString := utils.FindFirstStringOrDefault(reContactEmail, defineString, "")
-	registerString := utils.FindFirstStringOrDefault(reContactRegister, defineString, "")
+	contactMap["name"] = utils.FindFirstStringOrDefault(reGenericName, defineString, "")
 
-	contactMap["name"] = contactObjectNameString
-	if contactNameString != "" {
+	if contactNameString := utils.FindFirstStringOrDefault(reContactName, defineString, ""); contactNameString != "" {
 		contactMap["contactName"] = contactNameString
 	}
-	if useString != "" {
+	if useString := utils.FindFirstStringOrDefault(reGenericUse, defineString, ""); useString != "" {
 		contactMap["use"] = useString
 	}
-	if aliasString != "" {
+	if aliasString := utils.FindFirstStringOrDefault(reContactAlias, defineString, ""); aliasString != "" {
 		contactMap["alias"] = aliasString
 	}
-	if emailString != "" {
+	if emailString := utils.FindFirstStringOrDefault(reContactEmail, defineString, ""); emailString != "" {
 		contactMap["email"] = emailString
 	}
-	if registerString != "" {
+	if registerString := utils.FindFirstStringOrDefault(reGenericRegister, defineString, ""); registerString != "" {
 		contactMap["register"] = registerString
+	}
+	if hostNotificationsEnabled := utils.FindFirstStringOrDefault(reContactHostNotificationsEnabled, defineString, ""); hostNotificationsEnabled != "" {
+		contactMap["hostNotificationsEnabled"] = hostNotificationsEnabled
+	}
+	if serviceNotificationsEnabled := utils.FindFirstStringOrDefault(reContactServiceNotificationsEnabled, defineString, ""); serviceNotificationsEnabled != "" {
+		contactMap["serviceNotificationsEnabled"] = serviceNotificationsEnabled
+	}
+	if hostNotificationPeriod := utils.FindFirstStringOrDefault(reContactHostNotificationPeriod, defineString, ""); hostNotificationPeriod != "" {
+		contactMap["hostNotificationPeriod"] = hostNotificationPeriod
+	}
+	if serviceNotificationPeriod := utils.FindFirstStringOrDefault(reContactServiceNotificationPeriod, defineString, ""); serviceNotificationPeriod != "" {
+		contactMap["serviceNotificationPeriod"] = serviceNotificationPeriod
+	}
+	if hostNotificationOptions := utils.FindFirstStringOrDefault(reContactHostNotificationOptions, defineString, ""); hostNotificationOptions != "" {
+		contactMap["hostNotificationOptions"] = hostNotificationOptions
+	}
+	if serviceNotificationOptions := utils.FindFirstStringOrDefault(reContactServiceNotificationOptions, defineString, ""); serviceNotificationOptions != "" {
+		contactMap["serviceNotificationOptions"] = serviceNotificationOptions
+	}
+	if hostNotificationCommand := utils.FindFirstStringOrDefault(reContactHostNotificationCommand, defineString, ""); hostNotificationCommand != "" {
+		contactMap["hostNotificationCommand"] = hostNotificationCommand
+	}
+	if serviceNotificationCommand := utils.FindFirstStringOrDefault(reContactServiceNotificationCommand, defineString, ""); serviceNotificationCommand != "" {
+		contactMap["serviceNotificationCommand"] = serviceNotificationCommand
 	}
 	// if _, ok := contactMap["use"]; ok == true {
 	return contactMap

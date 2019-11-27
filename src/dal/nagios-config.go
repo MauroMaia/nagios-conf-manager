@@ -9,6 +9,10 @@ import (
 	"nagios-conf-manager/src/utils/exceptions"
 )
 
+var reGenericName = regexp.MustCompile(`.*name *(.+).*`)
+var reGenericUse = regexp.MustCompile(`.*use *(.+).*`)
+var reGenericRegister = regexp.MustCompile(`.*register *(.+).*`)
+
 var reCFGDeclarationLine = regexp.MustCompile("\ncfg_file=.*")
 
 func GetConfigurationFies(nagiosConfigDir string) ([]string, error) {

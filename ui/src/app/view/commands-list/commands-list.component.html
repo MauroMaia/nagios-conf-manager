@@ -1,0 +1,28 @@
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let timePeriod of commandsObservable|async">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{timePeriod.command_name}}
+      </mat-panel-title>
+      <mat-panel-description>
+        description needs to be here
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-list>
+      <mat-list-item>>
+        <div matLine>
+          <p style="float:left">Command Name: </p>
+          <p style="float:right">{{timePeriod.command_name}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">Command Line: </p>
+          <p style="float:right">{{timePeriod.command_line}}</p>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+</mat-accordion>
+
