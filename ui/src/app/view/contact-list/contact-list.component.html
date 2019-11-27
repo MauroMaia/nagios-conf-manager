@@ -1,0 +1,84 @@
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let host of contactObservableList|async">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{host.contact_name}} ( {{host.alias}} )
+      </mat-panel-title>
+      <mat-panel-description>
+        description needs to be here
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-list>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">Name: </p>
+          <p style="float:right">{{host.name}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">Contact Name: </p>
+          <p style="float:right">{{host.contact_name}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine><p style="float:left">Alias: </p>
+          <p style="float:right">{{host.alias}}</p></div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine><p style="float:left">Email: </p>
+          <p style="float:right">{{host.email}}</p></div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine><p style="float:left">Contact template: </p>
+          <p style="float:right">{{host.use}}</p></div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine><p style="float:left">host_notifications_enabled: </p>
+          <p style="float:right">{{host.host_notifications_enabled}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">service_notifications_enabled: </p>
+          <p style="float:right">{{host.service_notifications_enabled}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine><p style="float:left">host_notification_period: </p>
+          <p style="float:right">{{host.host_notification_period}}</p></div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine><p style="float:left">service_notification_period: </p>
+          <p
+            style="float:right">{{host.service_notification_period}}</p></div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine><p style="float:left">host_notification_commands: </p>
+          <p style="float:right">{{host.host_notification_commands}}</p></div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine><p style="float:left">service_notification_commands: </p>
+          <p style="float:right">{{host.service_notification_commands}}</p></div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine><p style="float:left">host_notification_options: </p>
+          <p style="float:right">{{host.host_notification_options}}</p></div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">service_notification_options: </p>
+          <p style="float:right">{{host.service_notification_options}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">IsTemplate: </p>
+          <p style="float:right">{{host.IsTemplate}}</p>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+</mat-accordion>
+

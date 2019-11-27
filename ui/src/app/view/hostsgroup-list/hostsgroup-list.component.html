@@ -1,0 +1,46 @@
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let host of hostGroupsSub | async">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{host.alias}} ( needs more info )
+      </mat-panel-title>
+      <mat-panel-description>
+        description needs to be here
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-list>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">Host Alias: </p>
+          <p style="float:right">{{host.alias}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">Host Group Name: </p>
+          <p style="float:right">{{host.hostgroup_name}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item *ngFor="let member of host.hostgroup_members; index as i">
+        <div matLine *ngIf="i == 0">
+          <p style="float:left">Groups Members: </p>
+          <p style="float:right">{{member}}</p>
+        </div>
+        <div matLine *ngIf="i > 0">
+          <p style="float:right">{{member}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item *ngFor="let member of host.members; index as i">
+        <div matLine *ngIf="i == 0">
+          <p style="float:left">Members: </p>
+          <p style="float:right">{{member}}</p>
+        </div>
+        <div matLine *ngIf="i > 0">
+          <p style="float:right">{{member}}</p>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+</mat-accordion>
+

@@ -1,0 +1,58 @@
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let host of servicesListObservable|async">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{host.service_description}} ( {{host.host_name}} )
+      </mat-panel-title>
+      <mat-panel-description>
+        description needs to be here
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-list>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">Service Description: </p>
+          <p style="float:right">{{host.service_description}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">host_name: </p>
+          <p style="float:right">{{host.host_name}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">check_interval: </p>
+          <p style="float:right">{{host.check_interval}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">check_command: </p>
+          <p style="float:right">{{host.check_command}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">notifications_enabled: </p>
+          <p style="float:right">{{host.notifications_enabled}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">retry_interval: </p>
+          <p style="float:right">{{host.retry_interval}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">Template to use: </p>
+          <p style="float:right">{{host.use}}</p>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+</mat-accordion>
+

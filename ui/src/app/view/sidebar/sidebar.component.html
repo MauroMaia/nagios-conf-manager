@@ -1,0 +1,12 @@
+<mat-drawer-container class="example-container">
+  <mat-drawer mode="side" opened>
+    <mat-list>
+      <mat-list-item *ngFor="let message of menus">
+        <a mat-list-item routerLink="/{{message}}" routerLinkActive="active"><h3 matLine> {{message}} </h3></a>
+      </mat-list-item>
+    </mat-list>
+  </mat-drawer>
+  <mat-drawer-content>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>

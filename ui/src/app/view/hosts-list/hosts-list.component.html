@@ -1,0 +1,58 @@
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let host of hostSubs|async">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{host.alias}} ( {{host.name}} )
+      </mat-panel-title>
+      <mat-panel-description>
+        {{host.address}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-list>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">Name: </p>
+          <p style="float:right">{{host.name}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">host_name: </p>
+          <p style="float:right">{{host.host_name}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">check_period: </p>
+          <p style="float:right">{{host.check_period}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">address: </p>
+          <p style="float:right">{{host.address}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">notification_interval: </p>
+          <p style="float:right">{{host.notification_interval}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">contact: </p>
+          <p style="float:right">{{host.contact}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">contact_groups: </p>
+          <p style="float:right">{{host.contact_groups}}</p>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+</mat-accordion>
+

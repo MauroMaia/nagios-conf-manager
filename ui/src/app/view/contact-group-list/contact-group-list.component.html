@@ -1,0 +1,37 @@
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let contactGroup of contactGroupObservableList|async">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{contactGroup.contactgroup_name}} ( {{contactGroup.alias}} )
+      </mat-panel-title>
+      <mat-panel-description>
+        description needs to be here
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-list>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">Contact Group Name: </p>
+          <p style="float:right">{{contactGroup.contactgroup_name}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">Alias: </p>
+          <p style="float:right">{{contactGroup.alias}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item *ngFor="let member of contactGroup.members; index as i">
+        <div matLine *ngIf="i == 0">
+          <p style="float:left">Members: </p>
+          <p style="float:right">{{member}}</p>
+        </div>
+        <div matLine *ngIf="i > 0">
+          <p style="float:right">{{member}}</p>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+</mat-accordion>
+

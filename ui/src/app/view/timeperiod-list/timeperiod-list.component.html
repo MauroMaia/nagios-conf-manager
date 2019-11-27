@@ -1,0 +1,77 @@
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let timePeriod of timePeriodObservable|async">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{timePeriod.timeperiod_name}}
+      </mat-panel-title>
+      <mat-panel-description>
+        {{timePeriod.name}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-list>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">Name: </p>
+          <p style="float:right">{{timePeriod.name}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item>
+        <div matLine>
+          <p style="float:left">Timeperiod Name: </p>
+          <p style="float:right">{{timePeriod.timeperiod_name}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item *ngIf="timePeriod.monday != ''">
+        <div matLine>
+          <p style="float:left">Monday: </p>
+          <p style="float:right">{{timePeriod.monday}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item *ngIf="timePeriod.tuesday != ''">
+        <div matLine>
+          <p style="float:left">Tuesday: </p>
+          <p style="float:right">{{timePeriod.tuesday}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item *ngIf="timePeriod.wednesday != ''">
+        <div matLine>
+          <p style="float:left">Wednesday: </p>
+          <p style="float:right">{{timePeriod.wednesday}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item *ngIf="timePeriod.thursday != ''">
+        <div matLine>
+          <p style="float:left">Thursday: </p>
+          <p style="float:right">{{timePeriod.thursday}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item *ngIf="timePeriod.friday != ''">
+        <div matLine>
+          <p style="float:left">Friday: </p>
+          <p style="float:right">{{timePeriod.friday}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item *ngIf="timePeriod.saturday != ''">
+        <div matLine>
+          <p style="float:left">Saturday: </p>
+          <p style="float:right">{{timePeriod.saturday}}</p>
+        </div>
+      </mat-list-item>
+      <mat-list-item *ngIf="timePeriod.sunday != ''">
+        <div matLine>
+          <p style="float:left">Sunday: </p>
+          <p style="float:right">{{timePeriod.sunday}}</p>
+        </div>
+      </mat-list-item>
+
+      <mat-list-item *ngFor="let member of timePeriod.Other; index as i">
+        <div matLine >
+          <p style="float:left">Something</p>
+          <p style="float:right">{{member}}</p>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+</mat-accordion>
+
