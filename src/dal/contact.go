@@ -38,7 +38,7 @@ func ConcurrentContactRead(nagiosConfigDir string) (chan *model.Contact, error) 
 
 		for _, file := range configFiles {
 			waitGroup.Add(1)
-			go ReadNagiosContactFromFileTask(file, channelMapOutput, &waitGroup)
+			go readNagiosContactFromFileTask(file, channelMapOutput, &waitGroup)
 
 			utils.Log.Printf("created a task to process the file %s", file)
 		}
@@ -81,7 +81,7 @@ func ConcurrentContactRead(nagiosConfigDir string) (chan *model.Contact, error) 
 	return channelOutput, nil
 }
 
-func ReadNagiosContactFromFileTask(file string, outputChannel chan map[string]string, waitG *sync.WaitGroup) {
+func readNagiosContactFromFileTask(file string, outputChannel chan map[string]string, waitG *sync.WaitGroup) {
 	if utils.IsFile(file) {
 
 		text := utils.ReadFileOrPanic(file)
@@ -169,6 +169,5 @@ func contactStringToMap(defineString string) map[string]string {
 	if serviceNotificationCommand := utils.FindFirstStringOrDefault(reContactServiceNotificationCommand, defineString, ""); serviceNotificationCommand != "" {
 		contactMap["serviceNotificationCommand"] = serviceNotificationCommand
 	}
-	// if _, ok := contactMap["use"]; ok == true {
 	return contactMap
 }

@@ -2,3 +2,4 @@
 nagiosFiles/
 
 *.log
+/bin/

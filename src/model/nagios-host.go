@@ -2,7 +2,7 @@ package model
 
 import (
 	"encoding/json"
-	"regexp"
+	"strconv"
 
 	"nagios-conf-manager/src/utils"
 	"nagios-conf-manager/src/utils/exceptions"
@@ -31,36 +31,39 @@ type Host struct {
 	// FOR MOR INFORMATION CHECK: https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/4/en/objectdefinitions.html#host
 }
 
-var reHostName = regexp.MustCompile(`.*hostName *(.+).*`)
-var reName = regexp.MustCompile(`.*name *(.+).*`)
-var reHostAlias = regexp.MustCompile(`.*alias *(.+).*`)
-var reAddress = regexp.MustCompile(`.*address *(.+).*`)
-var reMaxCheckAttempts = regexp.MustCompile(`.*max_check_attempts *(.+).*`)
-var reNotificationInterval = regexp.MustCompile(`.*notification_interval *(.+).*`)
-var reNotificationPeriod = regexp.MustCompile(`.*notification_period *(.+).*`)
-var reContact = regexp.MustCompile(`.*contact *(.+).*`)
-var reContactGroups = regexp.MustCompile(`.*contact_groups *(.+).*`)
-var reCheckPeriod = regexp.MustCompile(`.*check_period *(.+).*`)
-var reRegister = regexp.MustCompile(`.*register *(.+).*`)
+func NewNagiosHost(defineStringMap map[string]string) *Host {
+	hostObjectNameString := defineStringMap["name"]
 
-func NewNagiosHost(defineString string) *Host {
-	hostNameString := utils.FindFirstStringOrDefault(reHostName, defineString, "")
-	nameString := utils.FindFirstStringOrDefault(reName, defineString, "")
-	aliasString := utils.FindFirstStringOrDefault(reHostAlias, defineString, "")
-	addressString := utils.FindFirstStringOrDefault(reAddress, defineString, "")
+	var hostNameString, aliasString, addressString string
+	var maxCheckAttemptsInt, notificationInterval int64
+	var registerBool bool
 
-	maxCheckAttemptsInt, _ := utils.FindFirstIntOrDefault(reMaxCheckAttempts, defineString, 1)
-	notificationInterval, _ := utils.FindFirstIntOrDefault(reNotificationInterval, defineString, 60)
-
-	registerBool, _ := utils.FindFirstBooleanOrDefault(reRegister, defineString, true)
+	if contactName, ok := defineStringMap["hostName"]; ok == true {
+		hostNameString = contactName
+	}
+	if alias, ok := defineStringMap["alias"]; ok == true {
+		aliasString = alias
+	}
+	if address, ok := defineStringMap["address"]; ok == true {
+		addressString = address
+	}
+	if checkAtt, ok := defineStringMap["max_check_attempts"]; ok == true {
+		maxCheckAttemptsInt, _ = strconv.ParseInt(checkAtt, 10, 0)
+	}
+	if notificationInt, ok := defineStringMap["notification_interval"]; ok == true {
+		notificationInterval, _ = strconv.ParseInt(notificationInt, 10, 0)
+	}
+	if register, ok := defineStringMap["register"]; ok == true {
+		registerBool, _ = strconv.ParseBool(register)
+	}
 
 	return &Host{
+		Name:                 hostObjectNameString,
 		HostName:             hostNameString,
-		Name:                 nameString,
 		Alias:                aliasString,
 		Address:              addressString,
-		MaxCheckAttempts:     maxCheckAttemptsInt,
-		NotificationInterval: notificationInterval,
+		MaxCheckAttempts:     int(maxCheckAttemptsInt),
+		NotificationInterval: int(notificationInterval),
 
 		Register: registerBool,
 		Use:      "linux-server",

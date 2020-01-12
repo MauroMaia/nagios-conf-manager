@@ -40,8 +40,7 @@ type Contact struct {
 func NewNagiosContact(defineStringMap map[string]string, parent *Contact) *Contact {
 	contactObjectNameString := defineStringMap["name"]
 
-	var contactNameString, useString, aliasString, emailString, hostNotificationPeriodString,
-	serviceNotificationPeriodString, hostNotificationCommandString, serviceNotificationCommandString string
+	var contactNameString, useString, aliasString, emailString, hostNotificationPeriodString, serviceNotificationPeriodString, hostNotificationCommandString, serviceNotificationCommandString string
 	var isTemplate, hostNotificationsEnabledBool, serviceNotificationsEnabledBool bool
 	var hostNotificationOptionsStringArray, serviceNotificationOptionsStringArray []string
 

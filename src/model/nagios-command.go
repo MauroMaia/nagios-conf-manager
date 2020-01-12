@@ -2,7 +2,6 @@ package model
 
 import (
 	"encoding/json"
-	"regexp"
 
 	"nagios-conf-manager/src/utils"
 	"nagios-conf-manager/src/utils/exceptions"
@@ -10,22 +9,31 @@ import (
 
 type Command struct {
 	//      # REQUIRED
+	Name        string `json:"name"`
 	CommandName string `json:"command_name"`
 	CommandLine string `json:"command_line"`
 
 	// FOR MOR INFORMATION CHECK: https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/4/en/objectdefinitions.html#command
 }
 
-var reCommandName = regexp.MustCompile(`.*command_name *(.+).*`)
-var reCommandLine = regexp.MustCompile(`.*command_line *(.+).*`)
+func NewNagiosCommand(defineStringMap map[string]string) *Command {
 
-func NewNagiosCommand(defineString string) *Command {
-	hostNameString := utils.FindFirstStringOrDefault(reCommandName, defineString, "")
-	nameString := utils.FindFirstStringOrDefault(reCommandLine, defineString, "")
+	var nameString, commandLineString, commandNameString string
+
+	if contactName, ok := defineStringMap["name"]; ok == true {
+		nameString = contactName
+	}
+	if contactName, ok := defineStringMap["commandName"]; ok == true {
+		commandNameString = contactName
+	}
+	if use, ok := defineStringMap["commandLine"]; ok == true {
+		commandLineString = use
+	}
 
 	return &Command{
-		hostNameString,
 		nameString,
+		commandNameString,
+		commandLineString,
 	}
 }
 

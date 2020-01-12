@@ -2,6 +2,7 @@ package dal
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"sync"
 
@@ -9,7 +10,36 @@ import (
 	"nagios-conf-manager/src/utils"
 )
 
-func ReadNagiosCommandFromFileTask(file string, outputChannel chan *model.Command, waitG *sync.WaitGroup) {
+var reCommandName = regexp.MustCompile(`.*command_name *(.+).*`)
+var reCommandLine = regexp.MustCompile(`.*command_line *(.+).*`)
+
+func ConcurrentCommandRead(nagiosConfigDir string) (chan *model.Command, error) {
+	configFiles, err := GetConfigurationFies(nagiosConfigDir)
+	if err != nil {
+		return nil, err
+	}
+
+	channelOutput := make(chan *model.Command, 20)
+
+	go func() {
+		var waitGroup sync.WaitGroup
+
+		for _, file := range configFiles {
+			waitGroup.Add(1)
+			go readNagiosCommandFromFileTask(file, channelOutput, &waitGroup)
+
+			utils.Log.Printf("created a task to process the file %s", file)
+		}
+
+		// Wait for all threads/goroutines to stop
+		waitGroup.Wait()
+		close(channelOutput)
+	}()
+
+	return channelOutput, nil
+}
+
+func readNagiosCommandFromFileTask(file string, outputChannel chan *model.Command, waitG *sync.WaitGroup) {
 	if utils.IsFile(file) {
 
 		text := utils.ReadFileOrPanic(file)
@@ -29,12 +59,12 @@ func ReadNagiosCommandFromFileTask(file string, outputChannel chan *model.Comman
 			if reEndDefineStatement.MatchString(line) && strings.Compare(define, "") > 0 {
 				define += "\n"
 				define += line
-				outputChannel <- model.NewNagiosCommand(define)
+				outputChannel <- model.NewNagiosCommand(commandStringToMap(define))
 				define = ""
 				continue
 			}
 
-			if reStartCommand.MatchString(line)  {
+			if reStartCommand.MatchString(line) {
 				define = line
 			} else if strings.Compare(define, "") > 0 {
 				define += "\n"
@@ -50,4 +80,25 @@ func ReadNagiosCommandFromFileTask(file string, outputChannel chan *model.Comman
 	}
 
 	waitG.Done()
+}
+
+func commandStringToMap(defineString string) map[string]string {
+
+	var commandMap = make(map[string]string)
+
+	commandMap["name"] = utils.FindFirstStringOrDefault(reGenericName, defineString, "")
+
+	if contactNameString := utils.FindFirstStringOrDefault(reCommandName, defineString, ""); contactNameString != "" {
+		commandMap["commandName"] = contactNameString
+	}
+	if useString := utils.FindFirstStringOrDefault(reGenericUse, defineString, ""); useString != "" {
+		commandMap["use"] = useString
+	}
+	if aliasString := utils.FindFirstStringOrDefault(reCommandLine, defineString, ""); aliasString != "" {
+		commandMap["commandLine"] = aliasString
+	}
+	if registerString := utils.FindFirstStringOrDefault(reGenericRegister, defineString, ""); registerString != "" {
+		commandMap["register"] = registerString
+	}
+	return commandMap
 }

@@ -2,7 +2,6 @@ package model
 
 import (
 	"encoding/json"
-	"regexp"
 	"strings"
 
 	"nagios-conf-manager/src/utils"
@@ -18,24 +17,27 @@ type ContactGroup struct {
 	// FOR MOR INFORMATION CHECK: https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/4/en/objectdefinitions.html#contact
 }
 
-var reContactGroupName = regexp.MustCompile(`.*contactgroup_name *(.+).*`)
-var reContactGroupMembers = regexp.MustCompile(`.*members *(.+).*`)
-var reContactGroupAlias = regexp.MustCompile(`.*alias *(.+).*`)
+func NewNagiosContactGroup(defineStringMap map[string]string, parent *ContactGroup) *ContactGroup {
+	var groupMembers []string
+	var contactNameString, aliasString string
 
-func NewNagiosContactGroup(defineString string) *ContactGroup {
-	contactNameString := utils.FindFirstStringOrDefault(reContactGroupName, defineString, "")
-	groupMembersString := utils.FindFirstStringOrDefault(reContactGroupMembers, defineString, "")
-	aliasString := utils.FindFirstStringOrDefault(reContactGroupAlias, defineString, "")
+	if members, ok := defineStringMap["members"]; ok == true {
+		groupMembers = []string{members}
 
-	var hostGroupMembers = []string{groupMembersString}
-
-	if strings.Contains(groupMembersString, ","){
-		hostGroupMembers = strings.Split(groupMembersString, ",")
+		if strings.Contains(members, ",") {
+			groupMembers = strings.Split(members, ",")
+		}
+	}
+	if alias, ok := defineStringMap["alias"]; ok == true {
+		aliasString = alias
+	}
+	if contactName, ok := defineStringMap["contactGroupName"]; ok == true {
+		contactNameString = contactName
 	}
 
 	return &ContactGroup{
 		contactNameString,
-		hostGroupMembers,
+		groupMembers,
 		aliasString,
 	}
 }
