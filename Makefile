@@ -1,6 +1,13 @@
 
+list:
+	@echo "List of actions that can be executed"
+	@echo " -> clean"
+	@echo " -> compile"
+	@echo " -> run-webserver"
+
 clean:
-	rm -rf bin
+	rm -vrf bin || true
+	rm -v main || true
 
 compile:
 	@echo "Compiling for every OS and Platform"
