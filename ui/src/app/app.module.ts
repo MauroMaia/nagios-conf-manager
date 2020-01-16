@@ -32,6 +32,7 @@ import {ContactListComponent} from './view/contact-list/contact-list.component';
 import {ContactGroupListComponent} from './view/contact-group-list/contact-group-list.component';
 import {AddHostComponent} from './view/add-element/add-host/add-host.component';
 import {AddTimeperiodComponent} from './view/add-element/add-timeperiod/add-timeperiod.component';
+import { TimePeriodDaYUIComponent } from './view/shared/time-period-da-yui/time-period-da-yui.component';
 
 const appRoutes: Routes = [
   /*  { path: 'crisis-center', component: CrisisListComponent },
@@ -98,6 +99,7 @@ const appRoutes: Routes = [
     ContactGroupListComponent,
     AddHostComponent,
     AddTimeperiodComponent,
+    TimePeriodDaYUIComponent,
   ],
   imports     : [
     BrowserModule,

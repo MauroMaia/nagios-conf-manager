@@ -1,0 +1,13 @@
+<mat-checkbox (change)="this.changeStatus()" checked="{{(this.disable | async) || false}}">Enable
+  {{placeholder}}Timeperiod
+</mat-checkbox>
+<mat-form-field                 class="example-full-width">
+  <input type="text" matInput
+         [hidden]="(this.disable | async)"
+         [formControl]="tpDayOfWeek"
+         placeholder="{{placeholder}}">
+  <!--<mat-error
+    *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('required')">{{errorsStrings.dayOfWeek.required}}</mat-error>-->
+  <mat-error
+    *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('pattern')">{{errorsStrings.dayOfWeek.pattern}}</mat-error>
+</mat-form-field>

@@ -1,6 +1,3 @@
-<!--<div style="background-color: white;padding: 2rem"
-     class="mat-expansion-panel ng-tns-c15-9 ng-star-inserted mat-expanded mat-expansion-panel-spacing">-->
-
 <mat-card style="padding: 2rem">
 
   <h4 style="width: 100%;text-align: center">Add New TimePeriod</h4>
@@ -27,70 +24,41 @@
         *ngIf="this.tpDescription.invalid && this.tpDescription.hasError('pattern')">{{errorsStrings.description.pattern}}</mat-error>
     </mat-form-field>
 
-    <mat-checkbox (change)="disableStatus.monday=!disableStatus.monday">Enable Monday Timeperiod</mat-checkbox>
-    <mat-form-field class="example-full-width">
-      <input [disabled]="disableStatus.monday" type="text" matInput placeholder="Monday">
-      <mat-error
-        *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('required')">{{errorsStrings.dayOfWeek.required}}</mat-error>
-      <mat-error
-        *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('pattern')">{{errorsStrings.dayOfWeek.pattern}}</mat-error>
-    </mat-form-field>
+    <app-time-period-day-ui (disableChange)="this.disableStatus.monday"
+                            [disable]="this.disableStatusOb.monday "
+                            [placeholder]="'Monday2'"
+    ></app-time-period-day-ui>
 
-    <mat-checkbox (change)="disableStatus.tuesday=!disableStatus.tuesday">Enable Tuesday Timeperiod</mat-checkbox>
-    <mat-form-field class="example-full-width">
-      <input [disabled]="disableStatus.tuesday" type="text" matInput placeholder="Tuesday">
-      <mat-error
-        *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('required')">{{errorsStrings.dayOfWeek.required}}</mat-error>
-      <mat-error
-        *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('pattern')">{{errorsStrings.dayOfWeek.pattern}}</mat-error>
-    </mat-form-field>
+    <app-time-period-day-ui (disableChange)="this.disableStatus.tuesday"
+                            [disable]="this.disableStatusOb.tuesday "
+                            [placeholder]="'Tuesday'"
+    ></app-time-period-day-ui>
 
-    <mat-checkbox (change)="disableStatus.wednesday=!disableStatus.wednesday">Enable Wednesday Timeperiod</mat-checkbox>
-    <mat-form-field class="example-full-width">
-      <input [disabled]="disableStatus.wednesday" type="text" matInput placeholder="Wednesday">
-      <mat-error
-        *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('required')">{{errorsStrings.dayOfWeek.required}}</mat-error>
-      <mat-error
-        *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('pattern')">{{errorsStrings.dayOfWeek.pattern}}</mat-error>
-    </mat-form-field>
+    <app-time-period-day-ui (disableChange)="this.disableStatus.wednesday"
+                            [disable]="this.disableStatusOb.wednesday "
+                            [placeholder]="'Wednesday'"
+    ></app-time-period-day-ui>
 
-    <mat-checkbox (change)="disableStatus.thursday=!disableStatus.thursday">Enable Thursday Timeperiod</mat-checkbox>
-    <mat-form-field class="example-full-width">
-      <input [disabled]="disableStatus.thursday" type="text" matInput placeholder="Thursday">
-      <mat-error
-        *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('required')">{{errorsStrings.dayOfWeek.required}}</mat-error>
-      <mat-error
-        *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('pattern')">{{errorsStrings.dayOfWeek.pattern}}</mat-error>
-    </mat-form-field>
+    <app-time-period-day-ui (disableChange)="this.disableStatus.thursday"
+                            [disable]="this.disableStatusOb.thursday "
+                            [placeholder]="'Thursday'"
+    ></app-time-period-day-ui>
 
-    <mat-checkbox (change)="disableStatus.friday=!disableStatus.friday">Enable Friday Timeperiod</mat-checkbox>
-    <mat-form-field class="example-full-width">
-      <input [disabled]="disableStatus.friday" type="text" matInput placeholder="Friday">
-      <mat-error
-        *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('required')">{{errorsStrings.dayOfWeek.required}}</mat-error>
-      <mat-error
-        *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('pattern')">{{errorsStrings.dayOfWeek.pattern}}</mat-error>
-    </mat-form-field>
+    <app-time-period-day-ui (disableChange)="this.disableStatus.friday"
+                            [disable]="this.disableStatusOb.friday "
+                            [placeholder]="'Friday'"
+    ></app-time-period-day-ui>
 
-    <mat-checkbox (change)="disableStatus.saturday=!disableStatus.saturday">Enable Saturday Timeperiod</mat-checkbox>
-    <mat-form-field class="example-full-width">
-      <input [disabled]="disableStatus.saturday" type="text" matInput placeholder="Saturday">
-      <mat-error
-        *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('required')">{{errorsStrings.dayOfWeek.required}}</mat-error>
-      <mat-error
-        *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('pattern')">{{errorsStrings.dayOfWeek.pattern}}</mat-error>
-    </mat-form-field>
+    <app-time-period-day-ui (disableChange)="this.disableStatus.saturday"
+                            [disable]="this.disableStatusOb.saturday "
+                            [placeholder]="'Saturday'"
+    ></app-time-period-day-ui>
 
-    <mat-checkbox (change)="disableStatus.sunday=!disableStatus.sunday">Enable Sunday Timeperiod</mat-checkbox>
-    <mat-form-field class="example-full-width">
-      <input [disabled]="disableStatus.sunday" type="text" matInput placeholder="Sunday">
-      <mat-error
-        *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('required')">{{errorsStrings.dayOfWeek.required}}</mat-error>
-      <mat-error
-        *ngIf="this.tpDayOfWeek.invalid && this.tpDayOfWeek.hasError('pattern')">{{errorsStrings.dayOfWeek.pattern}}</mat-error>
-    </mat-form-field>
+    <app-time-period-day-ui (disableChange)="this.disableStatus.sunday"
+                            [disable]="this.disableStatusOb.sunday "
+                            [placeholder]="'Sunday'"
+    ></app-time-period-day-ui>
 
     <button mat-button>Add</button>
   </div>
 </mat-card>
-<!--</div>-->
