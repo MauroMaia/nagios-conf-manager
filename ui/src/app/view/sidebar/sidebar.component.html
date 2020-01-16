@@ -3,11 +3,23 @@
   <mat-drawer mode="side" opened>
     <mat-list>
       <mat-list-item *ngFor="let message of menus">
-        <a mat-list-item routerLink="/{{message}}" routerLinkActive="active"><h3 matLine> {{message}} </h3></a>
+
+        <a mat-list-item routerLink="/{{message}}" routerLinkActive="active">
+          <h3 matLine style="text-transform: capitalize"> {{message}} </h3>
+        </a>
+
+        <a routerLink="/{{message}}/new" routerLinkActive="active">
+          <mat-icon svgIcon='add-24px'
+                    aria-hidden="false"
+                    color="primary"></mat-icon>
+        </a>
+
       </mat-list-item>
     </mat-list>
   </mat-drawer>
-  <mat-drawer-content >
-    <router-outlet ></router-outlet>
+
+  <mat-drawer-content>
+    <router-outlet></router-outlet>
   </mat-drawer-content>
+
 </mat-drawer-container>

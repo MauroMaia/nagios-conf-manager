@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {MatIconRegistry} from '@angular/material';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector   : 'app-sidebar',
@@ -17,7 +19,12 @@ export class SidebarComponent implements OnInit {
     'contactgroups'
   ];
 
-  constructor() { }
+  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+    iconRegistry.addSvgIcon(
+      'add-24px',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/add-24px.svg'),
+    );
+  }
 
   ngOnInit() { }
 

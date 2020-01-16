@@ -1,13 +1,15 @@
 import {ReactiveFormsModule} from '@angular/forms';
 import {
-  MatButtonModule, MatExpansionModule,
-  MatIconModule,
+  ErrorStateMatcher,
+  MatButtonModule, MatCardModule, MatCheckboxModule,
+  MatExpansionModule, MatFormFieldModule, MatInputModule,
   MatListModule,
-  MatNativeDateModule,
-  MatSidenavModule,
+  MatNativeDateModule, MatSelectModule,
+  MatSidenavModule, MatSlideToggleModule,
   MatTableModule,
-  MatToolbarModule, MatTreeModule,
+  MatToolbarModule, MatTreeModule, ShowOnDirtyErrorStateMatcher,
 } from '@angular/material';
+import {MatIconModule} from '@angular/material/icon';
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
@@ -28,6 +30,8 @@ import {CommandsListComponent} from './view/commands-list/commands-list.componen
 import {ServiceListComponent} from './view/service-list/service-list.component';
 import {ContactListComponent} from './view/contact-list/contact-list.component';
 import {ContactGroupListComponent} from './view/contact-group-list/contact-group-list.component';
+import {AddHostComponent} from './view/add-element/add-host/add-host.component';
+import {AddTimeperiodComponent} from './view/add-element/add-timeperiod/add-timeperiod.component';
 
 const appRoutes: Routes = [
   /*  { path: 'crisis-center', component: CrisisListComponent },
@@ -47,6 +51,10 @@ const appRoutes: Routes = [
     pathMatch: 'full',
     component: HostsListComponent,
   }, {
+    path     : 'hosts/new',
+    pathMatch: 'full',
+    component: AddHostComponent,
+  }, {
     path     : 'hostsgroup',
     pathMatch: 'full',
     component: HostsgroupListComponent,
@@ -54,6 +62,10 @@ const appRoutes: Routes = [
     path     : 'timeperiods',
     pathMatch: 'full',
     component: TimeperiodListComponent,
+  }, {
+    path     : 'timeperiods/new',
+    pathMatch: 'full',
+    component: AddTimeperiodComponent,
   }, {
     path     : 'commands',
     pathMatch: 'full',
@@ -84,6 +96,8 @@ const appRoutes: Routes = [
     ServiceListComponent,
     ContactListComponent,
     ContactGroupListComponent,
+    AddHostComponent,
+    AddTimeperiodComponent,
   ],
   imports     : [
     BrowserModule,
@@ -103,8 +117,15 @@ const appRoutes: Routes = [
     MatTableModule,
     MatExpansionModule,
     MatTreeModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
   ],
   providers   : [
+    {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher},
     HostDataService,
     HostgroupDataService,
     CommandsService,
