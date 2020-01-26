@@ -3,16 +3,14 @@ Description=Nagios configuration Manager Web Deamon
 Documentation=https://github.com/MauroMaia/nagios-conf-manager
 After=syslog.target network.target
 
-
 [Service]
-User=mauro.maia
-Group=mauro.maia
+User=##USER##
+Group=##USER##
 Type=simple
 WorkingDirectory=/var/lib/nagios-conf-manager
 ExecStart=/var/lib/nagios-conf-manager/bin/ncf-linux web
 Restart=on-failure
 RestartSec=10
-startLimitIntervalSec=60
 
 [Install]
 WantedBy=multi-user.target

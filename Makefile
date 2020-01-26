@@ -49,7 +49,7 @@ uninstall:
 	@echo "DONE uninstall the project"
 
 release-draft:
-	#@SEE https://hub.github.com/hub-release.1.html
+	# @SEE https://hub.github.com/hub-release.1.html
 	@echo "Release a draft to git hub WIP"
 
 all: clean compile
