@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func GetContactGroups(c *gin.Context) {
-	contactGroups, err := controller.ListAllContactGroups("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+	contactGroups, err := controller.ListAllContactGroups(os.Getenv("NAGIOS_BASE_PATH"))
 	if err != nil {
 		// http.Error(response, "já foste: "+err.Error(), http.StatusInternalServerError)
 		_ = c.Error(err)
@@ -24,7 +25,7 @@ func GetContactGroups(c *gin.Context) {
 
 func GetContactGroupByName(c *gin.Context) {
 	requestParameterName := c.Param("name")
-	contactGroup, err := controller.FindContactGroupByName("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles", requestParameterName)
+	contactGroup, err := controller.FindContactGroupByName(os.Getenv("NAGIOS_BASE_PATH"), requestParameterName)
 	if err != nil {
 		// http.Error(response, "já foste: "+err.Error(), http.StatusInternalServerError)
 		_ = c.Error(err)

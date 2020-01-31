@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func GetHostList(c *gin.Context) {
-	hosts, err := controller.ListAllHosts("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+	hosts, err := controller.ListAllHosts(os.Getenv("NAGIOS_BASE_PATH"))
 	if err != nil {
 		// http.Error(response, "já foste: "+err.Error(), http.StatusInternalServerError)
 		_ = c.Error(err)
@@ -25,7 +26,7 @@ func GetHostList(c *gin.Context) {
 
 func GetHostByName(c *gin.Context) {
 	requestParameterName := c.Param("name")
-	host, err := controller.FindHostByName("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles", requestParameterName)
+	host, err := controller.FindHostByName(os.Getenv("NAGIOS_BASE_PATH"), requestParameterName)
 	if err != nil {
 		// http.Error(response, "já foste: "+err.Error(), http.StatusInternalServerError)
 		_ = c.Error(err)

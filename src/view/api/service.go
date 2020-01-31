@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func GetServices(c *gin.Context) {
-	services, err := controller.ListAllService("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+	services, err := controller.ListAllService(os.Getenv("NAGIOS_BASE_PATH"))
 	if err != nil {
 		// http.Error(response, "já foste: "+err.Error(), http.StatusInternalServerError)
 		_ = c.Error(err)
@@ -24,7 +25,7 @@ func GetServices(c *gin.Context) {
 
 func GetServiceByName(c *gin.Context) {
 	requestParameterName := c.Param("name")
-	service, err := controller.FindServiceByName("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles", requestParameterName)
+	service, err := controller.FindServiceByName(os.Getenv("NAGIOS_BASE_PATH"), requestParameterName)
 	if err != nil {
 		// http.Error(response, "já foste: "+err.Error(), http.StatusInternalServerError)
 		_ = c.Error(err)

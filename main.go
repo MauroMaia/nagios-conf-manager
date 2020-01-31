@@ -20,8 +20,9 @@ func startWebservice() {
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{"GET", "POST"},
+		// AllowOrigins:     []string{"*"},
+		AllowAllOrigins:  true,
+		AllowMethods:     []string{"GET", "POST", "PUT", "OPTIONS"},
 		AllowHeaders:     []string{"Origin"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
@@ -57,6 +58,7 @@ func startWebservice() {
 	r.GET("/contactgroups/:name", api.GetContactGroupByName)
 
 	r.GET("/timeperiods", api.GetTimePeriods)
+	r.PUT("/timeperiods", api.PutTimePeriod)
 	r.GET("/timeperiods/:name", api.GetTimePeriodByName)
 
 	/*r.POST("/todo", handlers.AddTodoHandler)
@@ -74,6 +76,14 @@ func main() {
 		cmd.PrintErrorString(fmt.Sprintf("Cli expected %v subcommands", []string{"cli", "webserver"}), 1)
 	}
 
+	NBP := os.Getenv("NAGIOS_BASE_PATH")
+	if NBP == "" {
+		err := os.Setenv("NAGIOS_BASE_PATH", "/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+		if err != nil {
+			cmd.PrintError(err, 1)
+		}
+
+	}
 	switch os.Args[1] {
 	case "cli":
 		controller.CliParseDomain()

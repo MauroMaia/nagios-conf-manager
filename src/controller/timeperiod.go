@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"errors"
 	"sync"
 
 	"nagios-conf-manager/src/dal"
@@ -58,4 +59,24 @@ func FindTimePeriodByName(nagiosConfigDir string, name string) (*model.TimePerio
 		}
 	}
 	return nil, nil
+}
+
+func CreateNewTimePeriod(nagiosConfigDir string, newTimePeriod model.TimePeriods) (*model.TimePeriods, error) {
+	channelOutput, err := readAllTimePeriods(nagiosConfigDir)
+	if err != nil {
+		return nil, err
+	}
+
+	for timePeriod := range channelOutput {
+		if timePeriod.Name == newTimePeriod.Name {
+			utils.Log.Printf("Timeperiod with name/id: %s, already exist.", timePeriod.Name)
+			return nil, errors.New("duplicated")
+		}
+	}
+
+	if !model.Validate(&newTimePeriod) {
+		return nil, errors.New("invalid object")
+	}
+
+	return &newTimePeriod, nil
 }

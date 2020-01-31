@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func GetCommands(c *gin.Context) {
-	commands, err := controller.ListAllCommands("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+	commands, err := controller.ListAllCommands(os.Getenv("NAGIOS_BASE_PATH"))
 	if err != nil {
 		// http.Error(response, "já foste: "+err.Error(), http.StatusInternalServerError)
 		_ = c.Error(err)
@@ -24,7 +25,7 @@ func GetCommands(c *gin.Context) {
 
 func GetCommandByName(c *gin.Context) {
 	requestParameterName := c.Param("name")
-	command, err := controller.FindCommandByName("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles", requestParameterName)
+	command, err := controller.FindCommandByName(os.Getenv("NAGIOS_BASE_PATH"), requestParameterName)
 	if err != nil {
 		// http.Error(response, "já foste: "+err.Error(), http.StatusInternalServerError)
 		_ = c.Error(err)

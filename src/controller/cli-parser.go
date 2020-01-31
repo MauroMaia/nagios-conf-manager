@@ -46,7 +46,7 @@ func CliParseDomain() {
 func parseTimePeriodActions() {
 	switch os.Args[3] {
 	case "list":
-		timePeriods, err := ListAllTimePeriods("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+		timePeriods, err := ListAllTimePeriods(os.Getenv("NAGIOS_BASE_PATH"))
 		if err != nil {
 			cmd.PrintError(err, 2)
 		} else {
@@ -60,7 +60,7 @@ func parseTimePeriodActions() {
 func parseServicesActions() {
 	switch os.Args[3] {
 	case "list":
-		hosts, err := ListAllService("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+		hosts, err := ListAllService(os.Getenv("NAGIOS_BASE_PATH"))
 		if err != nil {
 			cmd.PrintError(err, 2)
 		} else {
@@ -74,7 +74,7 @@ func parseServicesActions() {
 func parseHostActions() {
 	switch os.Args[3] {
 	case "list":
-		hosts, err := ListAllHosts("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+		hosts, err := ListAllHosts(os.Getenv("NAGIOS_BASE_PATH"))
 		if err != nil {
 			cmd.PrintError(err, 2)
 		} else {
@@ -88,7 +88,7 @@ func parseHostActions() {
 func parseHostGroupActions() {
 	switch os.Args[3] {
 	case "list":
-		hostGroups, err := ListAllHostGroups("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+		hostGroups, err := ListAllHostGroups(os.Getenv("NAGIOS_BASE_PATH"))
 		if err != nil {
 			cmd.PrintError(err, 2)
 		} else {
@@ -102,7 +102,7 @@ func parseHostGroupActions() {
 func parseCommandsActions() {
 	switch os.Args[3] {
 	case "list":
-		commands, err := ListAllCommands("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+		commands, err := ListAllCommands(os.Getenv("NAGIOS_BASE_PATH"))
 		if err != nil {
 			cmd.PrintError(err, 2)
 		} else {
@@ -116,7 +116,7 @@ func parseCommandsActions() {
 func parseContactGroupsActions() {
 	switch os.Args[3] {
 	case "list":
-		contactGroups, err := ListAllContactGroups("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+		contactGroups, err := ListAllContactGroups(os.Getenv("NAGIOS_BASE_PATH"))
 		if err != nil {
 			cmd.PrintError(err, 2)
 		} else {
@@ -132,7 +132,7 @@ func parseContactGroupsActions() {
 func parseContactsActions() {
 	switch os.Args[3] {
 	case "list":
-		contacts, err := ListAllContacts("/home/mauro.maia/go/src/nagios-conf-manager/nagiosFiles")
+		contacts, err := ListAllContacts(os.Getenv("NAGIOS_BASE_PATH"))
 		if err != nil {
 			cmd.PrintError(err, 2)
 		} else {
