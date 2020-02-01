@@ -3,3 +3,4 @@ nagiosFiles/
 
 *.log
 /bin/
+/ncm-*.tar.gz

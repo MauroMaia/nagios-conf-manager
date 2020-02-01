@@ -54,6 +54,9 @@ install: compile
 	@echo -e "$(COLOR_YELLOW)Applying systemctl configs.$(COLOR_END)"
 	sudo su root -c 'cd /lib/systemd/system/ && ln -nsf /var/lib/nagios-conf-manager/nagios-conf-manager.service nagios-conf-manager.service'
 	sudo systemctl daemon-reload
+	@echo -e "$(COLOR_YELLOW)NCF was installed sucessfuly.$(COLOR_END)"
+	@echo -e "$(COLOR_YELLOW)\nIf you want o start the service run: systemctl start nagios-conf-manager$(COLOR_END)"
+	@echo -e "$(COLOR_YELLOW)If you want o enable the service on system start run: systemctl enable nagios-conf-manager$(COLOR_END)"
 
 uninstall:
 	@echo -e "$(COLOR_YELLOW)Stopping nagios-conf-manager service.$(COLOR_END)"
