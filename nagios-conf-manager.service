@@ -8,7 +8,7 @@ User=##USER##
 Group=##USER##
 Type=simple
 WorkingDirectory=/var/lib/nagios-conf-manager
-ExecStart=/var/lib/nagios-conf-manager/bin/ncf-linux web
+ExecStart=/var/lib/nagios-conf-manager/bin/ncm-linux web
 Restart=on-failure
 RestartSec=10
 
