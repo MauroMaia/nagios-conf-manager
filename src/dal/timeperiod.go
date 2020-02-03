@@ -1,7 +1,6 @@
 package dal
 
 import (
-	"fmt"
 	"strings"
 	"sync"
 
@@ -14,19 +13,18 @@ func ReadNagiosTimePeriodsFromFileTask(file string, outputChannel chan *model.Ti
 
 	defer waitG.Done()
 
-	tpf, err := fs.NewConcurrentFile(file)
+	tpf, err := fs.NewTimePeriodConcurrentFile(file)
 	if err != nil {
-		utils.Log.Println(fmt.Sprintf("Cant't find file %s ", file))
+		utils.Log.Printf("Cant't find file %s\n", file)
 		return
 	}
 
-	text, err := tpf.ReadFile()
+	linesOfText, err := tpf.ReadFile()
 	if err != nil {
-		utils.Log.Println(fmt.Sprintf("Cant't find file %s error %s", file, err))
+		utils.Log.Printf("Cant't read file %s error %s\n", file, err)
 		return
 	}
 
-	linesOfText := strings.Split(text, string('\n'))
 	define := ""
 
 	for _, line := range linesOfText {
